@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RankStuff - Multiple Items</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #e0ffd6, #ffffff);
+      color: #333;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    .item h2 {
+      margin-top: 0;
+    }
+    .rating-buttons button {
+      font-size: 1.3em;
+      margin: 5px 6px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #66cc66;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .rating-buttons button:hover {
+      background-color: #4da64d;
+    }
+    .rating-buttons button.disabled {
+      background-color: #ccc !important;
+      cursor: not-allowed;
+    }
+    .results {
+      margin-top: 15px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>RankStuff: Rate These Items</h1>
+
+  <div class="item" data-id="grass">
+    <h2>🌿 Grass</h2>
+    <p>How would you rank grass from 1 to 10?</p>
+    <div class="rating-buttons"></div>
+    <div class="results">
+      <p>Average Rating: <span class="avg">-</span></p>
+      <p>Total Votes: <span class="votes">0</span></p>
+    </div>
+  </div>
+
+  <div class="item" data-id="pizza">
+    <h2>🍕 Pizza</h2>
+    <p>How would you rank pizza from 1 to 10?</p>
+    <div class="rating-buttons"></div>
+    <div class="results">
+      <p>Average Rating: <span class="avg">-</span></p>
+      <p>Total Votes: <span class="votes">0</span></p>
+    </div>
+  </div>
+
+  <div class="item" data-id="video-games">
+    <h2>🎮 Video Games</h2>
+    <p>How would you rank video games from 1 to 10?</p>
+    <div class="rating-buttons"></div>
+    <div class="results">
+      <p>Average Rating: <span class="avg">-</span></p>
+      <p>Total Votes: <span class="votes">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    // For each item, setup the buttons, votes, and averages.
+    document.querySelectorAll('.item').forEach(item => {
+      const id = item.getAttribute('data-id');
+      const ratingButtonsDiv = item.querySelector('.rating-buttons');
+      const avgSpan = item.querySelector('.avg');
+      const votesSpan = item.querySelector('.votes');
+
+      let totalVotes = 0;
+      let totalScore = 0;
+
+      // Check localStorage if user voted on this item
+      let hasVoted = localStorage.getItem('rankstuff_' + id + '_voted') === 'true';
+
+      // Create buttons 1-10
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.onclick = () => {
+          if (hasVoted) return;
+          totalVotes++;
+          totalScore += i;
+          avgSpan.textContent = (totalScore / totalVotes).toFixed(2);
+          votesSpan.textContent = totalVotes;
+          hasVoted = true;
+          localStorage.setItem('rankstuff_' + id + '_voted', 'true');
+          disableButtons();
+        };
+        ratingButtonsDiv.appendChild(btn);
+      }
+
+      function disableButtons() {
+        ratingButtonsDiv.querySelectorAll('button').forEach(btn => {
+          btn.classList.add('disabled');
+          btn.disabled = true;
+        });
+      }
+
+      if (hasVoted) {
+        disableButtons();
+      }
+    });
+  </script>
+</body>
+</html>
