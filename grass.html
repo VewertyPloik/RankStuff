@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RankStuff: Grass</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #e0ffd6, #ffffff);
+      color: #333;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+    .rating-buttons button {
+      font-size: 1.5em;
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #66cc66;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .rating-buttons button:hover {
+      background-color: #4da64d;
+    }
+    .results {
+      margin-top: 30px;
+      font-size: 1.2em;
+    }
+    .disabled {
+      background-color: #ccc !important;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌿 RankStuff: Grass</h1>
+  <p>How would you rank grass from 1 to 10?</p>
+  <div class="rating-buttons" id="ratingButtons"></div>
+  <div class="results">
+    <p>Average Rating: <span id="avg">-</span></p>
+    <p>Total Votes: <span id="votes">0</span></p>
+  </div>
+
+  <script>
+    const ratingButtons = document.getElementById('ratingButtons');
+    const avgSpan = document.getElementById('avg');
+    const votesSpan = document.getElementById('votes');
+
+    let totalVotes = 0;
+    let totalScore = 0;
+
+    // Check if user already voted in localStorage
+    let hasVoted = localStorage.getItem('rankstuff_grass_voted') === 'true';
+
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.onclick = () => {
+        if (hasVoted) return;
+        totalVotes++;
+        totalScore += i;
+        avgSpan.textContent = (totalScore / totalVotes).toFixed(2);
+        votesSpan.textContent = totalVotes;
+        hasVoted = true;
+        localStorage.setItem('rankstuff_grass_voted', 'true');
+        disableButtons();
+      };
+      ratingButtons.appendChild(btn);
+    }
+
+    function disableButtons() {
+      const buttons = ratingButtons.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.classList.add('disabled');
+        btn.disabled = true;
+      });
+    }
+
+    // Disable buttons immediately if already voted
+    if (hasVoted) {
+      disableButtons();
+    }
+  </script>
+</body>
+</html>
