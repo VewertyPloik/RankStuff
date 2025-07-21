@@ -1,2 +1,0 @@
-# RankStuff
-Rank things.
