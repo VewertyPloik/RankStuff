@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RankStuff: Pizza</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom, #ffe0b3, #ffffff);
+      color: #333;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+    .rating-buttons button {
+      font-size: 1.5em;
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff9966;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .rating-buttons button:hover {
+      background-color: #e67300;
+    }
+    .results {
+      margin-top: 30px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍕 RankStuff: Pizza</h1>
+  <p>How would you rank pizza from 1 to 10?</p>
+  <div class="rating-buttons" id="ratingButtons"></div>
+  <div class="results">
+    <p>Total Votes: <span id="votes">0</span></p>
+  </div>
+
+  <script>
+    const ratingButtons = document.getElementById('ratingButtons');
+    const votesSpan = document.getElementById('votes');
+    const key = 'pizza_total_votes';
+    let votes = parseInt(localStorage.getItem(key)) || 0;
+    votesSpan.textContent = votes;
+
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.onclick = () => {
+        alert(`You ranked pizza: ${i}`);
+      };
+      ratingButtons.appendChild(btn);
+    }
+
+    function addVote() {
+      votes++;
+      localStorage.setItem(key, votes);
+      votesSpan.textContent = votes;
+    }
+
+    setInterval(addVote, 10000); // every 10 seconds
+  </script>
+</body>
+</html>
